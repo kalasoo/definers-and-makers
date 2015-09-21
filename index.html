@@ -38,7 +38,7 @@ body {
     text-align: center;
 }
 section + section {
-    margin-top: 50px;
+    margin-top: 100px;
 }
 .logo {
     height: 150px;
@@ -62,6 +62,10 @@ button {
 button:hover, button:active {
     background-color: rgba(156, 217, 249, .25);
 }
+.count {
+    font-size: 2em;
+    font-weight: bold;
+}
 @media (max-width: 680px) {
     body {
         font-size: .8em;
@@ -69,15 +73,24 @@ button:hover, button:active {
 }
 @media (max-height: 600px) {
     .logo {
+        height: 120px;
+    }
+    section + section {
+        margin-top: 80px;
+    }
+}
+
+@media (max-height: 500px) {
+    .logo {
         height: 100px;
     }
     section + section {
-        margin-top: 20px;
+        margin-top: 50px;
     }
 }
 canvas {
     position:fixed;
-}</style></head><body><canvas></canvas><div class="container"><section><img src="assets/logo.png" class="logo"><h2>京城技术含量最高的一次线下聚会</h2><div class="row"><div class="col-3"><h2>70 </h2><p>技术大咖</p></div><div class="col-3"><h2>20</h2><p>优秀创业者</p></div><div class="col-3"><h2>20</h2><p>名校归国学生</p></div></div></section><section><p><strong>地点：「科技寺」北新桥</strong></p><p><small>北京市东城区东四北大街107号科林大厦B座107室 </small></p></section><section><p><strong>时间：2015 年 9 月 25 日</strong></p><p><small>晚 7：30 - 11：30</small></p></section></div><footer><a href="http://form.mikecrm.com/f.php?t=zc6G2K"><button>点击报名</button></a></footer><script src="lib/animation.js"></script><script>(function() {
+}</style></head><body><canvas></canvas><div class="container"><section><img src="assets/logo.png" class="logo"><h2>京城技术含量最高的一次线下聚会</h2><div class="row"><div class="col-3"><div class="count">70 </div><p>技术大咖</p></div><div class="col-3"><div class="count">20</div><p>优秀创业者</p></div><div class="col-3"><div class="count">20</div><p>名校归国学生</p></div></div></section><section><p><strong>地点：「科技寺」北新桥</strong></p><p><small>北京市东城区东四北大街107号科林大厦B座107室 </small></p><p><strong>时间：2015 年 9 月 25 日</strong></p><p><small>晚 7：30 - 11：30</small></p></section></div><footer><a href="http://form.mikecrm.com/f.php?t=zc6G2K"><button>点击报名</button></a></footer><script src="lib/animation.js"></script><script>(function() {
 
     var width, height, largeHeader, canvas, ctx, points, target, animateHeader = true;
 

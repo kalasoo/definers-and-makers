@@ -45,7 +45,7 @@ html
                 text-align: center;
             }
             section + section {
-                margin-top: 50px;
+                margin-top: 100px;
             }
             .logo {
                 height: 150px;
@@ -69,6 +69,10 @@ html
             button:hover, button:active {
                 background-color: rgba(156, 217, 249, .25);
             }
+            .count {
+                font-size: 2em;
+                font-weight: bold;
+            }
             @media (max-width: 680px) {
                 body {
                     font-size: .8em;
@@ -76,10 +80,19 @@ html
             }
             @media (max-height: 600px) {
                 .logo {
+                    height: 120px;
+                }
+                section + section {
+                    margin-top: 80px;
+                }
+            }
+
+            @media (max-height: 500px) {
+                .logo {
                     height: 100px;
                 }
                 section + section {
-                    margin-top: 20px;
+                    margin-top: 50px;
                 }
             }
             canvas {
@@ -93,20 +106,19 @@ html
                 h2 京城技术含量最高的一次线下聚会
                 .row
                     .col-3
-                        h2 70 
+                        .count 70 
                         p 技术大咖
                     .col-3
-                        h2 20
+                        .count 20
                         p 优秀创业者
                     .col-3
-                        h2 20
+                        .count 20
                         p 名校归国学生
             section
                 p
                     strong 地点：「科技寺」北新桥
                 p
                     small 北京市东城区东四北大街107号科林大厦B座107室 
-            section
                 p
                     strong 时间：2015 年 9 月 25 日
                 p
