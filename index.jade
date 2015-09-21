@@ -1,10 +1,24 @@
 doctype html
 html
     head
-        title Definers & Makers
+        title Definers & Makers 邀请函
         meta(name='viewport', content='width=device-width, initial-scale=1, user-scalable=no')
-        link(href='lib/flexboxgrid.min.css', rel="stylesheet")
+        //- link(href='lib/flexboxgrid.min.css', rel="stylesheet")
         style.
+            .row {
+                *zoom: 1;
+            }
+            .row:before, .row:after {
+                content: " ";
+                display: table;
+            }
+            .row:after {
+                clear: both;
+            }
+            .col-3 {
+                width: 33.3%;
+                display: inline-block;
+            }
             *, *:before, *:after {
                 -webkit-box-sizing: border-box;
                 -moz-box-sizing: border-box;
@@ -78,13 +92,13 @@ html
                 img.logo(src='assets/logo.png')
                 h2 京城技术含量最高的一次线下聚会
                 .row
-                    .col-xs
+                    .col-3
                         h2 70 
                         p 技术大咖
-                    .col-xs
+                    .col-3
                         h2 20
                         p 优秀创业者
-                    .col-xs
+                    .col-3
                         h2 20
                         p 名校归国学生
             section
