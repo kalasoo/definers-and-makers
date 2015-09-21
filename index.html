@@ -1,316 +1,250 @@
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
+<!DOCTYPE html><html><head><title>Definers & Makers</title><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><link href="node_modules/flexboxgrid/dist/flexboxgrid.min.css" rel="stylesheet"><style>*, *:before, *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    outline: none;
+}
+html, body {
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+}
+body {
+    font-family: 'Lantinghei SC', Helvetica, Arial, 'Hiragino Sans GB', 'STHeiti', 'WenQuanYi Micro Hei', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    background: black;
+    color: white;
+}
+.container {
+    width: 600px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 10px;
+    text-align: center;
+}
+section + section {
+    margin-top: 50px;
+}
+.container img {
+    max-width: 100%;
+}
+.logo {
+    height: 20vh;
+}
+footer {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+button {
+    padding: 10px 40px;
+    border: 1px solid white;
+    background-color: rgba(255, 255, 255, .2);
+    color: white;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: background .3s;
+}
+button:hover, button:active {
+    background-color: rgba(255, 255, 255, .3);
+}
+@media (max-width: 680px) {
+    body {
+        font-size: .8em;
+    }
+}
+@media (max-height: 600px) {
+    section + section {
+        margin-top: 20px;
+    }
+}
+canvas {
+    position:fixed;
+}</style></head><body><canvas></canvas><div class="container"><section><img src="assets/logo.png" class="logo"><h2>京城技术含量最高的一次线下聚会</h2><div class="row"><div class="col-xs"><h2>70 </h2><p>技术大咖</p></div><div class="col-xs"><h2>20</h2><p>优秀创业者</p></div><div class="col-xs"><h2>20</h2><p>名校归国学生</p></div></div></section><section><p><strong>地点：「科技寺」北新桥</strong></p><p><small>北京市东城区东四北大街107号科林大厦B座107室 </small></p></section><section><p><strong>时间：2015 年 9 月 25 日</strong></p><p><small>晚 7：30 - 11：30</small></p></section></div><footer><a href="http://form.mikecrm.com/f.php?t=zc6G2K"><button>点击报名</button></a></footer><script src="animation.js"></script><script>(function() {
 
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
+    var width, height, largeHeader, canvas, ctx, points, target, animateHeader = true;
 
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
-/******/ 			return installedModules[moduleId].exports;
+    // Main
+    initHeader();
+    initAnimation();
+    addListeners();
 
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
-/******/ 		};
+    function initHeader() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        target = {x: width/2, y: height/2};
 
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+        largeHeader = document.querySelector('body');
+        largeHeader.style.height = height+'px';
 
-/******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
+        canvas = document.querySelector('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        ctx = canvas.getContext('2d');
 
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
+        // create points
+        points = [];
+        for(var x = 0; x < width; x = x + width/10) {
+            for(var y = 0; y < height; y = y + height/10) {
+                var px = x + Math.random()*width/10;
+                var py = y + Math.random()*height/10;
+                var p = {x: px, originX: px, y: py, originY: py };
+                points.push(p);
+            }
+        }
 
+        // for each point find the 5 closest points
+        for(var i = 0; i < points.length; i++) {
+            var closest = [];
+            var p1 = points[i];
+            for(var j = 0; j < points.length; j++) {
+                var p2 = points[j]
+                if(!(p1 == p2)) {
+                    var placed = false;
+                    for(var k = 0; k < 5; k++) {
+                        if(!placed) {
+                            if(closest[k] == undefined) {
+                                closest[k] = p2;
+                                placed = true;
+                            }
+                        }
+                    }
 
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
+                    for(var k = 0; k < 5; k++) {
+                        if(!placed) {
+                            if(getDistance(p1, p2) < getDistance(p1, closest[k])) {
+                                closest[k] = p2;
+                                placed = true;
+                            }
+                        }
+                    }
+                }
+            }
+            p1.closest = closest;
+        }
 
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
+        // assign a circle to each point
+        for(var i in points) {
+            var c = new Circle(points[i], 2+Math.random()*2, 'rgba(255,255,255,0.3)');
+            points[i].circle = c;
+        }
+    }
 
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+    // Event handling
+    function addListeners() {
+        if(!('ontouchstart' in window)) {
+            window.addEventListener('mousemove', mouseMove);
+        }
+        window.addEventListener('scroll', scrollCheck);
+        window.addEventListener('resize', resize);
+    }
 
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports, __webpack_require__) {
+    function mouseMove(e) {
+        var posx = posy = 0;
+        if (e.pageX || e.pageY) {
+            posx = e.pageX;
+            posy = e.pageY;
+        }
+        else if (e.clientX || e.clientY)    {
+            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        }
+        target.x = posx;
+        target.y = posy;
+    }
 
-	var jade = __webpack_require__(1);
+    function scrollCheck() {
+        if(document.body.scrollTop > height) animateHeader = false;
+        else animateHeader = true;
+    }
 
-	module.exports = function template(locals) {
-	var buf = [];
-	var jade_mixins = {};
-	var jade_interp;
+    function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        largeHeader.style.height = height+'px';
+        canvas.width = width;
+        canvas.height = height;
+    }
 
-	buf.push("<!DOCTYPE html><html><head><title>最好的</title></head><body></body></html>");;return buf.join("");
-	}
+    // animation
+    function initAnimation() {
+        animate();
+        for(var i in points) {
+            shiftPoint(points[i]);
+        }
+    }
 
-/***/ },
-/* 1 */
-/***/ function(module, exports, __webpack_require__) {
+    function animate() {
+        if(animateHeader) {
+            ctx.clearRect(0,0,width,height);
+            for(var i in points) {
+                // detect points in range
+                if(Math.abs(getDistance(target, points[i])) < 4000) {
+                    points[i].active = 0.3;
+                    points[i].circle.active = 0.6;
+                } else if(Math.abs(getDistance(target, points[i])) < 20000) {
+                    points[i].active = 0.1;
+                    points[i].circle.active = 0.3;
+                } else if(Math.abs(getDistance(target, points[i])) < 40000) {
+                    points[i].active = 0.02;
+                    points[i].circle.active = 0.1;
+                } else {
+                    points[i].active = 0;
+                    points[i].circle.active = 0;
+                }
 
-	'use strict';
+                drawLines(points[i]);
+                points[i].circle.draw();
+            }
+        }
+        requestAnimationFrame(animate);
+    }
 
-	/**
-	 * Merge two attribute objects giving precedence
-	 * to values in object `b`. Classes are special-cased
-	 * allowing for arrays and merging/joining appropriately
-	 * resulting in a string.
-	 *
-	 * @param {Object} a
-	 * @param {Object} b
-	 * @return {Object} a
-	 * @api private
-	 */
+    function shiftPoint(p) {
+        TweenLite.to(p, 1+1*Math.random(), {x:p.originX-50+Math.random()*100,
+            y: p.originY-50+Math.random()*100, ease:Circ.easeInOut,
+            onComplete: function() {
+                shiftPoint(p);
+            }});
+    }
 
-	exports.merge = function merge(a, b) {
-	  if (arguments.length === 1) {
-	    var attrs = a[0];
-	    for (var i = 1; i < a.length; i++) {
-	      attrs = merge(attrs, a[i]);
-	    }
-	    return attrs;
-	  }
-	  var ac = a['class'];
-	  var bc = b['class'];
+    // Canvas manipulation
+    function drawLines(p) {
+        if(!p.active) return;
+        for(var i in p.closest) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p.closest[i].x, p.closest[i].y);
+            ctx.strokeStyle = 'rgba(156,217,249,'+ p.active+')';
+            ctx.stroke();
+        }
+    }
 
-	  if (ac || bc) {
-	    ac = ac || [];
-	    bc = bc || [];
-	    if (!Array.isArray(ac)) ac = [ac];
-	    if (!Array.isArray(bc)) bc = [bc];
-	    a['class'] = ac.concat(bc).filter(nulls);
-	  }
+    function Circle(pos,rad,color) {
+        var _this = this;
 
-	  for (var key in b) {
-	    if (key != 'class') {
-	      a[key] = b[key];
-	    }
-	  }
+        // constructor
+        (function() {
+            _this.pos = pos || null;
+            _this.radius = rad || null;
+            _this.color = color || null;
+        })();
 
-	  return a;
-	};
+        this.draw = function() {
+            if(!_this.active) return;
+            ctx.beginPath();
+            ctx.arc(_this.pos.x, _this.pos.y, _this.radius, 0, 2 * Math.PI, false);
+            ctx.fillStyle = 'rgba(156,217,249,'+ _this.active+')';
+            ctx.fill();
+        };
+    }
 
-	/**
-	 * Filter null `val`s.
-	 *
-	 * @param {*} val
-	 * @return {Boolean}
-	 * @api private
-	 */
-
-	function nulls(val) {
-	  return val != null && val !== '';
-	}
-
-	/**
-	 * join array as classes.
-	 *
-	 * @param {*} val
-	 * @return {String}
-	 */
-	exports.joinClasses = joinClasses;
-	function joinClasses(val) {
-	  return (Array.isArray(val) ? val.map(joinClasses) :
-	    (val && typeof val === 'object') ? Object.keys(val).filter(function (key) { return val[key]; }) :
-	    [val]).filter(nulls).join(' ');
-	}
-
-	/**
-	 * Render the given classes.
-	 *
-	 * @param {Array} classes
-	 * @param {Array.<Boolean>} escaped
-	 * @return {String}
-	 */
-	exports.cls = function cls(classes, escaped) {
-	  var buf = [];
-	  for (var i = 0; i < classes.length; i++) {
-	    if (escaped && escaped[i]) {
-	      buf.push(exports.escape(joinClasses([classes[i]])));
-	    } else {
-	      buf.push(joinClasses(classes[i]));
-	    }
-	  }
-	  var text = joinClasses(buf);
-	  if (text.length) {
-	    return ' class="' + text + '"';
-	  } else {
-	    return '';
-	  }
-	};
-
-
-	exports.style = function (val) {
-	  if (val && typeof val === 'object') {
-	    return Object.keys(val).map(function (style) {
-	      return style + ':' + val[style];
-	    }).join(';');
-	  } else {
-	    return val;
-	  }
-	};
-	/**
-	 * Render the given attribute.
-	 *
-	 * @param {String} key
-	 * @param {String} val
-	 * @param {Boolean} escaped
-	 * @param {Boolean} terse
-	 * @return {String}
-	 */
-	exports.attr = function attr(key, val, escaped, terse) {
-	  if (key === 'style') {
-	    val = exports.style(val);
-	  }
-	  if ('boolean' == typeof val || null == val) {
-	    if (val) {
-	      return ' ' + (terse ? key : key + '="' + key + '"');
-	    } else {
-	      return '';
-	    }
-	  } else if (0 == key.indexOf('data') && 'string' != typeof val) {
-	    if (JSON.stringify(val).indexOf('&') !== -1) {
-	      console.warn('Since Jade 2.0.0, ampersands (`&`) in data attributes ' +
-	                   'will be escaped to `&amp;`');
-	    };
-	    if (val && typeof val.toISOString === 'function') {
-	      console.warn('Jade will eliminate the double quotes around dates in ' +
-	                   'ISO form after 2.0.0');
-	    }
-	    return ' ' + key + "='" + JSON.stringify(val).replace(/'/g, '&apos;') + "'";
-	  } else if (escaped) {
-	    if (val && typeof val.toISOString === 'function') {
-	      console.warn('Jade will stringify dates in ISO form after 2.0.0');
-	    }
-	    return ' ' + key + '="' + exports.escape(val) + '"';
-	  } else {
-	    if (val && typeof val.toISOString === 'function') {
-	      console.warn('Jade will stringify dates in ISO form after 2.0.0');
-	    }
-	    return ' ' + key + '="' + val + '"';
-	  }
-	};
-
-	/**
-	 * Render the given attributes object.
-	 *
-	 * @param {Object} obj
-	 * @param {Object} escaped
-	 * @return {String}
-	 */
-	exports.attrs = function attrs(obj, terse){
-	  var buf = [];
-
-	  var keys = Object.keys(obj);
-
-	  if (keys.length) {
-	    for (var i = 0; i < keys.length; ++i) {
-	      var key = keys[i]
-	        , val = obj[key];
-
-	      if ('class' == key) {
-	        if (val = joinClasses(val)) {
-	          buf.push(' ' + key + '="' + val + '"');
-	        }
-	      } else {
-	        buf.push(exports.attr(key, val, false, terse));
-	      }
-	    }
-	  }
-
-	  return buf.join('');
-	};
-
-	/**
-	 * Escape the given string of `html`.
-	 *
-	 * @param {String} html
-	 * @return {String}
-	 * @api private
-	 */
-
-	var jade_encode_html_rules = {
-	  '&': '&amp;',
-	  '<': '&lt;',
-	  '>': '&gt;',
-	  '"': '&quot;'
-	};
-	var jade_match_html = /[&<>"]/g;
-
-	function jade_encode_char(c) {
-	  return jade_encode_html_rules[c] || c;
-	}
-
-	exports.escape = jade_escape;
-	function jade_escape(html){
-	  var result = String(html).replace(jade_match_html, jade_encode_char);
-	  if (result === '' + html) return html;
-	  else return result;
-	};
-
-	/**
-	 * Re-throw the given `err` in context to the
-	 * the jade in `filename` at the given `lineno`.
-	 *
-	 * @param {Error} err
-	 * @param {String} filename
-	 * @param {String} lineno
-	 * @api private
-	 */
-
-	exports.rethrow = function rethrow(err, filename, lineno, str){
-	  if (!(err instanceof Error)) throw err;
-	  if ((typeof window != 'undefined' || !filename) && !str) {
-	    err.message += ' on line ' + lineno;
-	    throw err;
-	  }
-	  try {
-	    str = str || __webpack_require__(2).readFileSync(filename, 'utf8')
-	  } catch (ex) {
-	    rethrow(err, null, lineno)
-	  }
-	  var context = 3
-	    , lines = str.split('\n')
-	    , start = Math.max(lineno - context, 0)
-	    , end = Math.min(lines.length, lineno + context);
-
-	  // Error context
-	  var context = lines.slice(start, end).map(function(line, i){
-	    var curr = i + start + 1;
-	    return (curr == lineno ? '  > ' : '    ')
-	      + curr
-	      + '| '
-	      + line;
-	  }).join('\n');
-
-	  // Alter exception message
-	  err.path = filename;
-	  err.message = (filename || 'Jade') + ':' + lineno
-	    + '\n' + context + '\n\n' + err.message;
-	  throw err;
-	};
-
-	exports.DebugItem = function DebugItem(lineno, filename) {
-	  this.lineno = lineno;
-	  this.filename = filename;
-	}
-
-
-/***/ },
-/* 2 */
-/***/ function(module, exports) {
-
-	/* (ignored) */
-
-/***/ }
-/******/ ]);
+    // Util
+    function getDistance(p1, p2) {
+        return Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2);
+    }
+    
+})();</script></body></html>
