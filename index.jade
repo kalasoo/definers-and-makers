@@ -48,7 +48,8 @@ html
                 height: 150px;
             }
             .title {
-                margin-bottom: 50px;
+                font-size: 25px;
+                margin-bottom: 40px;
             }
             footer {
                 position: fixed;
@@ -80,6 +81,9 @@ html
                 font-weight: normal;
                 font-size: 12.8px;
             }
+            .count-description {
+                margin-top: 2px;
+            }
             @media (max-width: 680px) {
                 body {
                     font-size: .8em;
@@ -106,20 +110,22 @@ html
         .container
             section
                 img.logo(src='assets/logo.png')
-                h2.title 京城技术含量最高的一次线下聚会
+                .title 京城技术含量最高的
+                    br
+                    | 一次线下聚会
                 .row
                     .col-3
                         .count 70
                             span.count-postfix  位
-                        p 技术高手
+                        .count-description 技术高手
                     .col-3
                         .count 20
                             span.count-postfix  位
-                        p 优秀创业者
+                        .count-description 优秀创业者
                     .col-3 
                         .count 20
                             span.count-postfix  位
-                        p 名校归国学生
+                        .count-description 名校归国学生
             
         footer
             section
